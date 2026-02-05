@@ -14,7 +14,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow-x: hidden;
     color: #fff;
     text-align: center;
 }
@@ -26,6 +25,7 @@ body {
     border-radius: 26px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.25);
     max-width: 460px;
+    width: 90vw;
     animation: fadeIn 1.2s ease;
 }
 
@@ -62,12 +62,17 @@ button {
     color: white;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
 }
 
-.music-btn {
-    margin-top: 10px;
-    background: #ff7a95;
+/* Audio */
+.audio-box {
+    margin: 14px 0 10px;
+}
+
+audio {
+    width: 100%;
+    max-width: 320px;
+    border-radius: 20px;
 }
 
 /* Slideshow */
@@ -84,7 +89,7 @@ button {
     box-shadow: 0 15px 35px rgba(0,0,0,0.35);
 }
 
-/* FIXED IMAGE CENTERING (iPhone-safe) */
+/* Image centering (Safari-safe) */
 .slide {
     position: absolute;
     top: 50%;
@@ -113,7 +118,6 @@ button {
     inset: 0;
     background: rgba(0,0,0,0.25);
     backdrop-filter: blur(2px);
-    z-index: 5;
 }
 
 .final-love {
@@ -124,24 +128,6 @@ button {
     animation: glow 2.5s ease-in-out infinite;
 }
 
-/* Music indicator */
-.music-indicator {
-    position: fixed;
-    bottom: 16px;
-    right: 16px;
-    font-size: 22px;
-    opacity: 0.85;
-    animation: pulse 2s ease-in-out infinite;
-}
-
-/* Hearts */
-.heart {
-    position: absolute;
-    color: rgba(255,255,255,0.9);
-    font-size: 22px;
-    animation: float 6s linear infinite;
-}
-
 .hidden { display: none; }
 
 /* Animations */
@@ -150,40 +136,31 @@ button {
     to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes float {
-    0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
-}
-
 @keyframes glow {
     0% { text-shadow: 0 0 10px rgba(255,255,255,0.6); }
     50% { text-shadow: 0 0 18px rgba(255,255,255,0.9); }
     100% { text-shadow: 0 0 10px rgba(255,255,255,0.6); }
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 0.7; }
-    50% { transform: scale(1.15); opacity: 1; }
-    100% { transform: scale(1); opacity: 0.7; }
 }
 </style>
 </head>
 
 <body>
 
-<audio id="bgMusic" preload="auto" loop>
-    <source src="love-me-jeje.mp3" type="audio/mpeg">
-</audio>
-
-<div id="musicIndicator" class="music-indicator hidden">🎵</div>
-
 <!-- QUESTION -->
 <div class="card" id="question">
     <h1>Raihaanah 💕</h1>
+
     <p class="typing" id="typingText"></p>
 
-    <button class="music-btn" id="playBtn" onclick="playMusic()">▶ Play Music 💕</button>
+    <div class="audio-box">
+        <p style="font-style: italic; margin-bottom: 6px;">
+            Tap play and take your time 💕
+        </p>
+        <audio controls loop playsinline>
+            <source src="love-me-jeje.mp3" type="audio/mpeg">
+            Your browser does not support audio.
+        </audio>
+    </div>
 
     <p><strong>Will you be my Valentine? 🌹</strong></p>
 
@@ -215,33 +192,6 @@ button {
 </div>
 
 <script>
-const music = document.getElementById("bgMusic");
-const playBtn = document.getElementById("playBtn");
-const musicIndicator = document.getElementById("musicIndicator");
-music.volume = 0;
-
-/* iPhone-safe music start */
-function playMusic() {
-    music.volume = 0;
-    music.play().then(() => {
-        playBtn.classList.add("hidden");
-        musicIndicator.classList.remove("hidden");
-        setTimeout(fadeInMusic, 300);
-    }).catch(() => {});
-}
-
-function fadeInMusic() {
-    let v = music.volume;
-    const fade = setInterval(() => {
-        if (v < 1) {
-            v += 0.04;
-            music.volume = Math.min(v, 1);
-        } else {
-            clearInterval(fade);
-        }
-    }, 180);
-}
-
 /* Typing intro */
 const introText = "Every moment with you feels like home. So here I am, asking with my whole heart…";
 let i = 0;
@@ -256,20 +206,7 @@ let i = 0;
 function showLove() {
     question.classList.add("hidden");
     love.classList.remove("hidden");
-    playMusic();
 }
-
-/* Hearts */
-function createHeart() {
-    const h = document.createElement("div");
-    h.className = "heart";
-    h.innerHTML = "❤";
-    h.style.left = Math.random() * 100 + "vw";
-    h.style.fontSize = Math.random() * 18 + 12 + "px";
-    document.body.appendChild(h);
-    setTimeout(() => h.remove(), 6000);
-}
-setInterval(createHeart, 380);
 
 /* Slideshow */
 let current = 0;
