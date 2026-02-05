@@ -19,6 +19,9 @@ body {
     overflow-x: hidden;
 }
 
+/* Utility */
+.hidden { display: none; }
+
 /* Card */
 .card {
     background: rgba(255,255,255,0.22);
@@ -29,7 +32,7 @@ body {
     width: 90vw;
 }
 
-/* Headings */
+/* Text */
 h1 {
     font-size: 2.6em;
     margin-bottom: 10px;
@@ -199,8 +202,6 @@ audio { display: none; }
     }
 }
 
-.hidden { display: none; }
-
 @keyframes pulse {
     0% { transform: scale(1); opacity: 0.7; }
     50% { transform: scale(1.15); opacity: 1; }
@@ -217,7 +218,7 @@ audio { display: none; }
 
 <div id="musicIndicator" class="music-indicator hidden">🎵</div>
 
-<!-- START -->
+<!-- INTRO -->
 <div class="card" id="question">
     <h1>Raihaanah 💕</h1>
     <p class="typing" id="typingText"></p>
@@ -232,7 +233,7 @@ audio { display: none; }
     </div>
 </div>
 
-<!-- SLIDES -->
+<!-- SLIDESHOW -->
 <div class="card hidden" id="love">
     <h1>It’s Always You 💗</h1>
 
@@ -256,6 +257,7 @@ audio { display: none; }
 </div>
 
 <script>
+/* MUSIC */
 const music = document.getElementById("bgMusic");
 const playBtn = document.getElementById("playBtn");
 const musicIndicator = document.getElementById("musicIndicator");
@@ -267,22 +269,17 @@ function playMusic() {
     });
 }
 
+/* TYPING INTRO */
 const introText = "Every moment with you feels like home. So here I am, asking with my whole heart…";
-let i = 0;
+let ti = 0;
 (function typeIntro(){
-    if (i < introText.length) {
-        typingText.innerHTML += introText.charAt(i++);
+    if (ti < introText.length) {
+        typingText.innerHTML += introText.charAt(ti++);
         setTimeout(typeIntro, 45);
     }
 })();
 
-function showLove() {
-    question.classList.add("hidden");
-    love.classList.remove("hidden");
-    playMusic();
-}
-
-/* Floating hearts */
+/* HEARTS */
 setInterval(() => {
     const h = document.createElement("div");
     h.className = "heart";
@@ -292,24 +289,36 @@ setInterval(() => {
     setTimeout(() => h.remove(), 7000);
 }, 500);
 
-/* Slideshow */
+/* SHOW SLIDES */
+function showLove() {
+    question.classList.add("hidden");
+    love.classList.remove("hidden");
+    playMusic();
+    startSlideshow();
+}
+
+/* SLIDESHOW LOGIC */
 let current = 0;
 const slides = document.querySelectorAll(".slide");
 
-const slideTimer = setInterval(() => {
-    slides[current].classList.remove("active");
-    current++;
+function startSlideshow() {
+    setTimeout(() => {
+        const timer = setInterval(() => {
+            slides[current].classList.remove("active");
+            current++;
 
-    if (current >= slides.length) {
-        clearInterval(slideTimer);
-        showEnding();
-        return;
-    }
+            if (current >= slides.length) {
+                clearInterval(timer);
+                showEnding();
+                return;
+            }
 
-    slides[current].classList.add("active");
-}, 8500);
+            slides[current].classList.add("active");
+        }, 8500);
+    }, 8500);
+}
 
-/* Ending logic */
+/* ENDING */
 function showEnding() {
     document.getElementById("ending").classList.remove("hidden");
 
@@ -337,7 +346,7 @@ function showEnding() {
     });
 }
 
-/* Heart burst */
+/* HEART BURST */
 function heartBurst() {
     for (let i = 0; i < 18; i++) {
         const h = document.createElement("div");
