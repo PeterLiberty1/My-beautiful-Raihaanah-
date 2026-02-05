@@ -19,6 +19,63 @@ body {
     overflow-x: hidden;
 }
 
+/* Card */
+.card {
+    background: rgba(255,255,255,0.22);
+    padding: 26px;
+    border-radius: 26px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    max-width: 460px;
+    width: 90vw;
+}
+
+/* Headings */
+h1 {
+    font-size: 2.6em;
+    margin-bottom: 10px;
+}
+
+.typing {
+    min-height: 60px;
+    font-style: italic;
+}
+
+/* Buttons */
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+button {
+    background: #ff4d6d;
+    border: none;
+    padding: 14px 26px;
+    border-radius: 32px;
+    font-size: 1em;
+    color: white;
+    cursor: pointer;
+}
+
+/* Music */
+.music-btn {
+    margin: 10px auto;
+    background: #ff7a95;
+}
+
+audio { display: none; }
+
+.music-indicator {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    font-size: 22px;
+    opacity: 0.9;
+    animation: pulse 2s ease-in-out infinite;
+    z-index: 5;
+}
+
 /* Slideshow */
 .slideshow {
     position: relative;
@@ -26,8 +83,9 @@ body {
     max-width: 360px;
     height: 65vh;
     max-height: 420px;
-    overflow: hidden;
+    margin-top: 16px;
     border-radius: 22px;
+    overflow: hidden;
     background: rgba(0,0,0,0.15);
 }
 
@@ -41,7 +99,14 @@ body {
 
 .slide.active { opacity: 1; }
 
-/* Floating hearts (background) */
+/* Captions */
+.caption {
+    margin-top: 14px;
+    font-style: italic;
+    font-size: 1.15em;
+}
+
+/* Floating hearts */
 .heart {
     position: fixed;
     bottom: -10vh;
@@ -128,10 +193,6 @@ body {
 }
 
 @keyframes burst {
-    from {
-        transform: translate(0,0) scale(0.8);
-        opacity: 1;
-    }
     to {
         transform: translate(var(--x), var(--y)) scale(1.4);
         opacity: 0;
@@ -139,6 +200,12 @@ body {
 }
 
 .hidden { display: none; }
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.7; }
+}
 </style>
 </head>
 
@@ -148,23 +215,74 @@ body {
     <source src="love-me-jeje.mp3.mp3" type="audio/mpeg">
 </audio>
 
-<div class="slideshow">
-    <img class="slide active" src="slide1.jpg">
-    <img class="slide" src="slide2.jpg">
-    <img class="slide" src="slide3.jpg">
-    <img class="slide" src="slide4.jpg">
-    <img class="slide" src="slide5.jpg">
-    <img class="slide" src="slide6.jpg">
-    <img class="slide" src="slide7.jpg">
-    <img class="slide" src="slide8.jpg">
+<div id="musicIndicator" class="music-indicator hidden">🎵</div>
+
+<!-- START -->
+<div class="card" id="question">
+    <h1>Raihaanah 💕</h1>
+    <p class="typing" id="typingText"></p>
+
+    <button class="music-btn" id="playBtn" onclick="playMusic()">▶ Play Music 💕</button>
+
+    <p><strong>Will you be my Valentine? 🌹</strong></p>
+
+    <div class="buttons">
+        <button onclick="showLove()">Yes 💖</button>
+        <button onclick="showLove()">Always 💞</button>
+    </div>
 </div>
 
+<!-- SLIDES -->
+<div class="card hidden" id="love">
+    <h1>It’s Always You 💗</h1>
+
+    <div class="slideshow">
+        <img class="slide active" src="slide1.jpg">
+        <img class="slide" src="slide2.jpg">
+        <img class="slide" src="slide3.jpg">
+        <img class="slide" src="slide4.jpg">
+        <img class="slide" src="slide5.jpg">
+        <img class="slide" src="slide6.jpg">
+        <img class="slide" src="slide7.jpg">
+        <img class="slide" src="slide8.jpg">
+    </div>
+
+    <div class="caption" id="caption">My favourite smile 💗</div>
+</div>
+
+<!-- ENDING -->
 <div id="ending" class="ending hidden">
     <div class="envelope"></div>
 </div>
 
 <script>
-/* Background hearts */
+const music = document.getElementById("bgMusic");
+const playBtn = document.getElementById("playBtn");
+const musicIndicator = document.getElementById("musicIndicator");
+
+function playMusic() {
+    music.play().then(() => {
+        playBtn.classList.add("hidden");
+        musicIndicator.classList.remove("hidden");
+    });
+}
+
+const introText = "Every moment with you feels like home. So here I am, asking with my whole heart…";
+let i = 0;
+(function typeIntro(){
+    if (i < introText.length) {
+        typingText.innerHTML += introText.charAt(i++);
+        setTimeout(typeIntro, 45);
+    }
+})();
+
+function showLove() {
+    question.classList.add("hidden");
+    love.classList.remove("hidden");
+    playMusic();
+}
+
+/* Floating hearts */
 setInterval(() => {
     const h = document.createElement("div");
     h.className = "heart";
@@ -187,10 +305,11 @@ const slideTimer = setInterval(() => {
         showEnding();
         return;
     }
+
     slides[current].classList.add("active");
 }, 8500);
 
-/* Ending sequence */
+/* Ending logic */
 function showEnding() {
     document.getElementById("ending").classList.remove("hidden");
 
@@ -204,9 +323,7 @@ function showEnding() {
             w.innerText = word;
             document.body.appendChild(w);
 
-            if (word.includes("Raihaanah")) {
-                heartBurst();
-            }
+            if (word.includes("Raihaanah")) heartBurst();
 
             if (index === words.length - 1) {
                 setTimeout(() => {
@@ -220,7 +337,7 @@ function showEnding() {
     });
 }
 
-/* Heart burst effect */
+/* Heart burst */
 function heartBurst() {
     for (let i = 0; i < 18; i++) {
         const h = document.createElement("div");
