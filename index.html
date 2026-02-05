@@ -19,71 +19,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Card */
-.card {
-    background: rgba(255,255,255,0.22);
-    padding: 26px;
-    border-radius: 26px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-    max-width: 460px;
-    width: 90vw;
-    animation: fadeIn 1.2s ease;
-}
-
-/* Text */
-h1 {
-    font-size: 2.6em;
-    margin-bottom: 10px;
-}
-
-p {
-    font-size: 1.05em;
-    margin-bottom: 14px;
-}
-
-.typing {
-    min-height: 60px;
-    font-style: italic;
-}
-
-/* Buttons */
-.buttons {
-    display: flex;
-    justify-content: center;
-    gap: 14px;
-    flex-wrap: wrap;
-}
-
-button {
-    background: #ff4d6d;
-    border: none;
-    padding: 14px 26px;
-    border-radius: 32px;
-    font-size: 1em;
-    color: white;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-}
-
-/* Music */
-.music-btn {
-    margin: 10px auto;
-    background: #ff7a95;
-}
-
-audio { display: none; }
-
-/* Music icon */
-.music-indicator {
-    position: fixed;
-    bottom: 16px;
-    right: 16px;
-    font-size: 22px;
-    opacity: 0.9;
-    animation: pulse 2s ease-in-out infinite;
-    z-index: 5;
-}
-
 /* Slideshow */
 .slideshow {
     position: relative;
@@ -91,38 +26,22 @@ audio { display: none; }
     max-width: 360px;
     height: 65vh;
     max-height: 420px;
-    margin: 16px auto 0;
-    border-radius: 22px;
     overflow: hidden;
+    border-radius: 22px;
     background: rgba(0,0,0,0.15);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.35);
 }
 
 .slide {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    transform: translate(-50%, -50%);
+    inset: 0;
     object-fit: contain;
     opacity: 0;
     transition: opacity 1.6s ease;
 }
 
-.slide.active {
-    opacity: 1;
-}
+.slide.active { opacity: 1; }
 
-/* Bigger captions */
-.caption {
-    margin-top: 14px;
-    font-style: italic;
-    font-size: 1.15em;
-    line-height: 1.4;
-}
-
-/* Floating hearts */
+/* Floating hearts (background) */
 .heart {
     position: fixed;
     bottom: -10vh;
@@ -140,252 +59,180 @@ audio { display: none; }
 }
 
 /* Ending overlay */
-.ending-overlay {
+.ending {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.65);
-    z-index: 10;
+    background: rgba(0,0,0,0.75);
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 20;
 }
 
 /* Envelope */
 .envelope {
-    position: relative;
     width: 280px;
     height: 180px;
-}
-
-.envelope-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
     background: #fff;
-    border-radius: 6px;
-    z-index: 1;
+    border-radius: 8px;
+    position: relative;
 }
 
-.envelope-flap {
+.envelope::before {
+    content: "";
     position: absolute;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: #f2f2f2;
-    clip-path: polygon(0 0, 50% 50%, 100% 0, 100% 0, 0 0);
+    clip-path: polygon(0 0, 50% 50%, 100% 0);
     transform-origin: top;
-    animation: openFlap 1.2s ease forwards;
-    animation-delay: 0.6s;
-    z-index: 3;
+    animation: flapOpen 1.2s ease forwards;
 }
 
-/* Heart seal */
-.envelope-seal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 26px;
-    color: #ff2f5e;
-    z-index: 4;
-    animation: sealPulse 2s ease-in-out infinite;
+@keyframes flapOpen {
+    to { transform: rotateX(180deg); }
 }
 
-@keyframes sealPulse {
-    0% { transform: translate(-50%, -50%) scale(1); }
-    50% { transform: translate(-50%, -50%) scale(1.15); }
-    100% { transform: translate(-50%, -50%) scale(1); }
-}
-
-/* Letter */
-.letter {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    width: calc(100% - 20px);
-    height: 140px;
-    background: #fff;
-    border-radius: 6px;
-    z-index: 2;
+/* Word animation */
+.word {
+    position: fixed;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: clamp(2rem, 6vw, 3rem);
+    font-size: clamp(3rem, 8vw, 5rem);
     font-weight: 800;
     color: #fff;
-    text-align: center;
-    transform: translateY(60px);
-    opacity: 0;
-    animation: slideLetter 1.6s ease forwards;
-    animation-delay: 1.4s;
     text-shadow:
         0 0 15px #ff9bb5,
         0 0 30px #ff6f91,
         0 0 60px #ff4d6d;
+    opacity: 0;
+    animation: wordZoom 2s ease forwards;
+    z-index: 30;
 }
 
-/* Envelope fade */
-.envelope.fade-out {
-    animation: envelopeFade 1.2s ease forwards;
+@keyframes wordZoom {
+    0% { opacity: 0; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.05); }
+    100% { opacity: 1; transform: scale(1); }
 }
 
-@keyframes envelopeFade {
-    to { opacity: 0; transform: scale(0.9); }
+/* Heart burst */
+.burst-heart {
+    position: fixed;
+    color: #ff2f5e;
+    font-size: 22px;
+    pointer-events: none;
+    animation: burst 2s ease-out forwards;
+    z-index: 40;
 }
 
-@keyframes openFlap {
-    to { transform: rotateX(180deg); }
-}
-
-@keyframes slideLetter {
-    to { transform: translateY(-40px); opacity: 1; }
+@keyframes burst {
+    from {
+        transform: translate(0,0) scale(0.8);
+        opacity: 1;
+    }
+    to {
+        transform: translate(var(--x), var(--y)) scale(1.4);
+        opacity: 0;
+    }
 }
 
 .hidden { display: none; }
-
-/* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 0.7; }
-    50% { transform: scale(1.15); opacity: 1; }
-    100% { transform: scale(1); opacity: 0.7; }
-}
 </style>
 </head>
 
 <body>
 
-<audio id="bgMusic" loop playsinline preload="auto">
+<audio id="bgMusic" loop playsinline>
     <source src="love-me-jeje.mp3.mp3" type="audio/mpeg">
 </audio>
 
-<div id="musicIndicator" class="music-indicator hidden">🎵</div>
-
-<div class="card" id="question">
-    <h1>Raihaanah 💕</h1>
-    <p class="typing" id="typingText"></p>
-
-    <button class="music-btn" id="playBtn" onclick="playMusic()">▶ Play Music 💕</button>
-
-    <p><strong>Will you be my Valentine? 🌹</strong></p>
-
-    <div class="buttons">
-        <button onclick="showLove()">Yes 💖</button>
-        <button onclick="showLove()">Always 💞</button>
-    </div>
+<div class="slideshow">
+    <img class="slide active" src="slide1.jpg">
+    <img class="slide" src="slide2.jpg">
+    <img class="slide" src="slide3.jpg">
+    <img class="slide" src="slide4.jpg">
+    <img class="slide" src="slide5.jpg">
+    <img class="slide" src="slide6.jpg">
+    <img class="slide" src="slide7.jpg">
+    <img class="slide" src="slide8.jpg">
 </div>
 
-<div class="card hidden" id="love">
-    <h1>It’s Always You 💗</h1>
-
-    <div class="slideshow">
-        <img class="slide active" src="slide1.jpg" data-caption="My favourite smile 💗">
-        <img class="slide" src="slide2.jpg" data-caption="You feel like home">
-        <img class="slide" src="slide3.jpg" data-caption="Every moment with you">
-        <img class="slide" src="slide4.jpg" data-caption="Soft memories 🌸">
-        <img class="slide" src="slide5.jpg" data-caption="Always us">
-        <img class="slide" src="slide6.jpg" data-caption="Unforgettable">
-        <img class="slide" src="slide7.jpg" data-caption="My calm place">
-        <img class="slide" src="slide8.jpg" data-caption="It’s always you ❤️">
-    </div>
-
-    <div class="caption" id="caption">My favourite smile 💗</div>
-</div>
-
-<div id="endingOverlay" class="ending-overlay hidden">
-    <div class="envelope">
-        <div class="envelope-back"></div>
-        <div class="envelope-flap"></div>
-        <div class="letter" id="finalLove"></div>
-        <div class="envelope-seal">❤</div>
-    </div>
+<div id="ending" class="ending hidden">
+    <div class="envelope"></div>
 </div>
 
 <script>
-const music = document.getElementById("bgMusic");
-const playBtn = document.getElementById("playBtn");
-const musicIndicator = document.getElementById("musicIndicator");
-
-function playMusic() {
-    music.play().then(() => {
-        playBtn.classList.add("hidden");
-        musicIndicator.classList.remove("hidden");
-    }).catch(() => {});
-}
-
-/* Typing intro */
-const introText = "Every moment with you feels like home. So here I am, asking with my whole heart…";
-let ti = 0;
-(function typeIntro(){
-    if (ti < introText.length) {
-        typingText.innerHTML += introText.charAt(ti++);
-        setTimeout(typeIntro, 45);
-    }
-})();
-
-function showLove() {
-    question.classList.add("hidden");
-    love.classList.remove("hidden");
-    playMusic();
-}
-
-/* Floating hearts */
-function createHeart() {
+/* Background hearts */
+setInterval(() => {
     const h = document.createElement("div");
     h.className = "heart";
     h.innerHTML = "❤";
     h.style.left = Math.random() * 100 + "vw";
-    h.style.fontSize = Math.random() * 14 + 14 + "px";
     document.body.appendChild(h);
     setTimeout(() => h.remove(), 7000);
-}
-setInterval(createHeart, 500);
+}, 500);
 
-/* Slideshow – equal timing */
+/* Slideshow */
 let current = 0;
 const slides = document.querySelectorAll(".slide");
-const caption = document.getElementById("caption");
 
-function startSlideshow() {
-    setTimeout(() => {
-        const slideTimer = setInterval(() => {
-            slides[current].classList.remove("active");
-            current++;
+const slideTimer = setInterval(() => {
+    slides[current].classList.remove("active");
+    current++;
 
-            if (current >= slides.length) {
-                clearInterval(slideTimer);
-                setTimeout(showFinalLove, 1200);
-                return;
+    if (current >= slides.length) {
+        clearInterval(slideTimer);
+        showEnding();
+        return;
+    }
+    slides[current].classList.add("active");
+}, 8500);
+
+/* Ending sequence */
+function showEnding() {
+    document.getElementById("ending").classList.remove("hidden");
+
+    const words = ["I", "Love", "You", "Raihaanah ❤️"];
+    let delay = 1200;
+
+    words.forEach((word, index) => {
+        setTimeout(() => {
+            const w = document.createElement("div");
+            w.className = "word";
+            w.innerText = word;
+            document.body.appendChild(w);
+
+            if (word.includes("Raihaanah")) {
+                heartBurst();
             }
 
-            slides[current].classList.add("active");
-            caption.innerText = slides[current].dataset.caption;
-        }, 8500);
-    }, 8500);
+            if (index === words.length - 1) {
+                setTimeout(() => {
+                    document.querySelector(".envelope").style.display = "none";
+                    w.innerText = "I Love You Raihaanah ❤️";
+                }, 2000);
+            }
+        }, delay);
+
+        delay += 2000;
+    });
 }
-startSlideshow();
 
-/* Final envelope */
-function showFinalLove() {
-    endingOverlay.classList.remove("hidden");
-
-    const envelope = document.querySelector(".envelope");
-    const text = "I love you, Raihaanah ❤️";
-    let t = 0;
-
-    (function typeLove(){
-        if (t < text.length) {
-            finalLove.innerHTML += text.charAt(t++);
-            setTimeout(typeLove, 100);
-        }
-    })();
-
-    setTimeout(() => {
-        envelope.classList.add("fade-out");
-    }, 3200);
+/* Heart burst effect */
+function heartBurst() {
+    for (let i = 0; i < 18; i++) {
+        const h = document.createElement("div");
+        h.className = "burst-heart";
+        h.innerHTML = "❤";
+        h.style.left = "50%";
+        h.style.top = "50%";
+        h.style.setProperty("--x", (Math.random()*300-150)+"px");
+        h.style.setProperty("--y", (Math.random()*300-150)+"px");
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 2000);
+    }
 }
 </script>
 
