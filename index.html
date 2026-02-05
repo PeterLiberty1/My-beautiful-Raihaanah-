@@ -1,1 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Raihaanah 💕</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Segoe UI', 'Comic Sans MS', sans-serif;
+    background: linear-gradient(135deg, #ffb6c1, #ffd6e8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    color: #fff;
+    text-align: center;
+}
+
+/* Card */
+.card {
+    background: rgba(255,255,255,0.22);
+    padding: 25px;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    max-width: 380px;
+    animation: fadeIn 1.4s ease;
+    position: relative;
+    z-index: 4;
+}
+
+h1 {
+    font-size: 2.2em;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 1.05em;
+    margin-bottom: 15px;
+}
+
+.typing {
+    min-height: 65px;
+    font-style: italic;
+}
+
+.countdown {
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+/* Buttons */
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+button {
+    background: #ff4d6d;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-size: 1em;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+}
+
+button:hover {
+    transform: scale(1.1);
+    background: #ff1e4d;
+}
+
+#noBtn {
+    background: #ff9fb3;
+    position: absolute;
+}
+
+/* Play music button */
+.music-btn {
+    margin-top: 10px;
+    background: #ff7a95;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    color: white;
+    font-size: 0.95em;
+    cursor: pointer;
+}
+
+/* Slideshow */
+.slideshow-container {
+    margin-top: 15px;
+}
+
+.slideshow {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    margin: auto;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+}
+
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1);
+    transition: opacity 1.5s ease, transform 6s ease;
+}
+
+.slide.active {
+    opacity: 1;
+    transform: scale(1.08);
+}
+
+.caption {
+    margin-top: 12px;
+    font-style: italic;
+    font-size: 0.95em;
+}
+
+.fullscreen-btn {
+    margin-top: 10px;
+    background: #ff7a95;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+/* Ending */
+.ending-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.25);
+    backdrop-filter: blur(2px);
+    z-index: 5;
+}
+
+.final-love {
+    position: relative;
+    z-index: 6;
+    margin-top: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 12px rgba(255,255,255,0.7);
+    animation: glow 2.5s ease-in-out infinite;
+}
+
+/* Hearts */
+.heart {
+    position: absolute;
+    color: rgba(255,255,255,0.9);
+    font-size: 22px;
+    animation: float 6s linear infinite;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+    0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+@keyframes glow {
+    0% { text-shadow: 0 0 10px rgba(255,255,255,0.6); }
+    50% { text-shadow: 0 0 18px rgba(255,255,255,0.9); }
+    100% { text-shadow: 0 0 10px rgba(255,255,255,0.6); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 Music -->
+<audio id="bgMusic" loop>
+    <source src="love-me-jeje.mp3" type="audio/mpeg">
+</audio>
+
+<!-- QUESTION -->
+<div class="card" id="question">
+    <h1>Raihaanah 💕</h1>
+    <p class="typing" id="typingText"></p>
+    <div class="countdown" id="countdown"></div>
+
+    <button class="music-btn" id="playBtn" onclick="playMusic()">▶ Play Music 💕</button>
+
+    <p><strong>Will you be my Valentine? 🌹</strong></p>
+
+    <div class="buttons">
+        <button onclick="showLove()">Yes 💖</button>
+        <button onclick="showLove()">Always 💞</button>
+        <button id="noBtn" onmouseover="moveNo()">No 🙈</button>
+    </div>
+</div>
+
+<!-- LOVE -->
+<div class="card hidden" id="love">
+    <h1>It’s Always You 💗</h1>
+
+    <div class="slideshow-container">
+        <div class="slideshow">
+            <img class="slide active" src="slide1.jpg" data-caption="My favourite smile 💗">
+            <img class="slide" src="slide2.jpg" data-caption="You feel like home">
+            <img class="slide" src="slide3.jpg" data-caption="Every moment with you">
+            <img class="slide" src="slide4.jpg" data-caption="Soft memories 🌸">
+            <img class="slide" src="slide5.jpg" data-caption="Always us">
+            <img class="slide" src="slide6.jpg" data-caption="Unforgettable">
+            <img class="slide" src="slide7.jpg" data-caption="My calm place">
+            <img class="slide" src="slide8.jpg" data-caption="It’s always you ❤️">
+        </div>
+
+        <div class="caption" id="caption">My favourite smile 💗</div>
+        <button class="fullscreen-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+    </div>
+
+    <div id="endingOverlay" class="ending-overlay hidden"></div>
+    <p id="finalLove" class="final-love hidden"></p>
+</div>
+
+<script>
+/* Music play */
+const music = document.getElementById("bgMusic");
+const playBtn = document.getElementById("playBtn");
+
+function playMusic() {
+    music.play();
+    playBtn.classList.add("hidden");
+}
+
+/* Typing intro */
+const introText = "Every moment with you feels like home. So here I am, asking with my whole heart…";
+let ti = 0;
+function typeIntro() {
+    if (ti < introText.length) {
+        typingText.innerHTML += introText.charAt(ti);
+        ti++;
+        setTimeout(typeIntro, 45);
+    }
+}
+typeIntro();
+
+/* Countdown */
+function updateCountdown() {
+    const valentines = new Date(new Date().getFullYear(), 1, 14);
+    const now = new Date();
+    const diff = valentines - now;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    countdown.innerHTML = days >= 0
+        ? `⏳ ${days} days ${hours} hours until Valentine’s Day`
+        : "💘 It’s Valentine’s Day!";
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+/* No button */
+function moveNo() {
+    noBtn.style.left = Math.random() * 200 - 100 + "px";
+    noBtn.style.top = Math.random() * 80 - 40 + "px";
+}
+
+/* Show love */
+function showLove() {
+    question.classList.add("hidden");
+    love.classList.remove("hidden");
+}
+
+/* Hearts */
+function createHeart() {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "❤";
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.fontSize = Math.random() * 20 + 12 + "px";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 6000);
+}
+setInterval(createHeart, 350);
+
+/* Slideshow + ending */
+let currentSlide = 0;
+const slides = document.querySelectorAll(".slide");
+const cap = document.getElementById("caption");
+const finalLove = document.getElementById("finalLove");
+const overlay = document.getElementById("endingOverlay");
+
+const slideInterval = setInterval(() => {
+    slides[currentSlide].classList.remove("active");
+    currentSlide++;
+
+    if (currentSlide >= slides.length) {
+        clearInterval(slideInterval);
+        setTimeout(showFinalLove, 1200);
+        return;
+    }
+
+    slides[currentSlide].classList.add("active");
+    cap.innerText = slides[currentSlide].dataset.caption;
+    for (let i = 0; i < 8; i++) setTimeout(createHeart, i * 120);
+}, 4500);
+
+function showFinalLove() {
+    cap.innerText = "";
+    overlay.classList.remove("hidden");
+    finalLove.classList.remove("hidden");
+
+    const text = "I love you, Raihaanah ❤️";
+    let i = 0;
+    function typeLove() {
+        if (i < text.length) {
+            finalLove.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typeLove, 90);
+        }
+    }
+    typeLove();
+}
+
+/* Fullscreen */
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+    } else {
+        document.exitFullscreen();
+    }
+}
+</script>
+
+</body>
+</html>
