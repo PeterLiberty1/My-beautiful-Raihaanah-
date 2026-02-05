@@ -19,7 +19,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Utility */
 .hidden { display: none; }
 
 /* Card */
@@ -74,7 +73,6 @@ audio { display: none; }
     bottom: 16px;
     right: 16px;
     font-size: 22px;
-    opacity: 0.9;
     animation: pulse 2s ease-in-out infinite;
     z-index: 5;
 }
@@ -102,7 +100,7 @@ audio { display: none; }
 
 .slide.active { opacity: 1; }
 
-/* Captions */
+/* Caption */
 .caption {
     margin-top: 14px;
     font-style: italic;
@@ -153,6 +151,10 @@ audio { display: none; }
     background: #f2f2f2;
     clip-path: polygon(0 0, 50% 50%, 100% 0);
     transform-origin: top;
+    transform: rotateX(0deg);
+}
+
+.envelope.open::before {
     animation: flapOpen 1.2s ease forwards;
 }
 
@@ -160,7 +162,7 @@ audio { display: none; }
     to { transform: rotateX(180deg); }
 }
 
-/* Word animation */
+/* Words */
 .word {
     position: fixed;
     inset: 0;
@@ -248,7 +250,7 @@ audio { display: none; }
         <img class="slide" src="slide8.jpg">
     </div>
 
-    <div class="caption" id="caption">My favourite smile 💗</div>
+    <div class="caption">My favourite smile 💗</div>
 </div>
 
 <!-- ENDING -->
@@ -269,17 +271,17 @@ function playMusic() {
     });
 }
 
-/* TYPING INTRO */
+/* INTRO TYPING */
 const introText = "Every moment with you feels like home. So here I am, asking with my whole heart…";
-let ti = 0;
+let t = 0;
 (function typeIntro(){
-    if (ti < introText.length) {
-        typingText.innerHTML += introText.charAt(ti++);
+    if (t < introText.length) {
+        typingText.innerHTML += introText.charAt(t++);
         setTimeout(typeIntro, 45);
     }
 })();
 
-/* HEARTS */
+/* FLOATING HEARTS */
 setInterval(() => {
     const h = document.createElement("div");
     h.className = "heart";
@@ -289,7 +291,7 @@ setInterval(() => {
     setTimeout(() => h.remove(), 7000);
 }, 500);
 
-/* SHOW SLIDES */
+/* SHOW SLIDESHOW */
 function showLove() {
     question.classList.add("hidden");
     love.classList.remove("hidden");
@@ -297,7 +299,7 @@ function showLove() {
     startSlideshow();
 }
 
-/* SLIDESHOW LOGIC */
+/* SLIDES */
 let current = 0;
 const slides = document.querySelectorAll(".slide");
 
@@ -306,13 +308,11 @@ function startSlideshow() {
         const timer = setInterval(() => {
             slides[current].classList.remove("active");
             current++;
-
             if (current >= slides.length) {
                 clearInterval(timer);
                 showEnding();
                 return;
             }
-
             slides[current].classList.add("active");
         }, 8500);
     }, 8500);
@@ -320,10 +320,13 @@ function startSlideshow() {
 
 /* ENDING */
 function showEnding() {
-    document.getElementById("ending").classList.remove("hidden");
+    const ending = document.getElementById("ending");
+    const envelope = document.querySelector(".envelope");
+    ending.classList.remove("hidden");
+    envelope.classList.add("open");
 
     const words = ["I", "Love", "You", "Raihaanah ❤️"];
-    let delay = 1200;
+    let delay = 1500;
 
     words.forEach((word, index) => {
         setTimeout(() => {
@@ -336,12 +339,11 @@ function showEnding() {
 
             if (index === words.length - 1) {
                 setTimeout(() => {
-                    document.querySelector(".envelope").style.display = "none";
+                    envelope.style.display = "none";
                     w.innerText = "I Love You Raihaanah ❤️";
                 }, 2000);
             }
         }, delay);
-
         delay += 2000;
     });
 }
