@@ -254,9 +254,7 @@ audio { display: none; }
 </div>
 
 <!-- ENDING -->
-<div id="ending" class="ending hidden">
-    <div class="envelope"></div>
-</div>
+<div id="ending" class="ending hidden"></div>
 
 <script>
 /* MUSIC */
@@ -299,7 +297,7 @@ function showLove() {
     startSlideshow();
 }
 
-/* SLIDES */
+/* SLIDESHOW */
 let current = 0;
 const slides = document.querySelectorAll(".slide");
 
@@ -321,9 +319,13 @@ function startSlideshow() {
 /* ENDING */
 function showEnding() {
     const ending = document.getElementById("ending");
-    const envelope = document.querySelector(".envelope");
     ending.classList.remove("hidden");
-    envelope.classList.add("open");
+
+    const envelope = document.createElement("div");
+    envelope.className = "envelope";
+    ending.appendChild(envelope);
+
+    requestAnimationFrame(() => envelope.classList.add("open"));
 
     const words = ["I", "Love", "You", "Raihaanah ❤️"];
     let delay = 1500;
@@ -339,7 +341,7 @@ function showEnding() {
 
             if (index === words.length - 1) {
                 setTimeout(() => {
-                    envelope.style.display = "none";
+                    envelope.remove();
                     w.innerText = "I Love You Raihaanah ❤️";
                 }, 2000);
             }
