@@ -101,10 +101,14 @@ audio { display: none; }
     border-radius: 22px;
     overflow: hidden;
 }
+
 .slide {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
+    object-position: center center; /* ✅ iPhone centering fix */
     opacity: 0;
     transition: opacity 1.6s ease;
 }
