@@ -16,10 +16,21 @@ body {
     align-items: center;
     color: #fff;
     text-align: center;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
-.hidden { display: none; }
+/* Floating hearts */
+.heart {
+    position: fixed;
+    color: red;
+    font-size: 14px;
+    animation: floatUp 8s linear forwards;
+    opacity: 0.8;
+}
+@keyframes floatUp {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(-120vh); opacity: 0; }
+}
 
 /* Card */
 .card {
@@ -29,6 +40,7 @@ body {
     box-shadow: 0 15px 40px rgba(0,0,0,0.25);
     max-width: 460px;
     width: 90vw;
+    animation: fadeIn 1.2s ease;
 }
 
 /* Text */
@@ -36,7 +48,10 @@ h1 {
     font-size: 2.6em;
     margin-bottom: 10px;
 }
-
+p {
+    font-size: 1.05em;
+    margin-bottom: 14px;
+}
 .typing {
     min-height: 60px;
     font-style: italic;
@@ -49,7 +64,6 @@ h1 {
     gap: 14px;
     flex-wrap: wrap;
 }
-
 button {
     background: #ff4d6d;
     border: none;
@@ -58,6 +72,7 @@ button {
     font-size: 1em;
     color: white;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* Music */
@@ -65,7 +80,6 @@ button {
     margin: 10px auto;
     background: #ff7a95;
 }
-
 audio { display: none; }
 
 .music-indicator {
@@ -73,8 +87,7 @@ audio { display: none; }
     bottom: 16px;
     right: 16px;
     font-size: 22px;
-    animation: pulse 2s ease-in-out infinite;
-    z-index: 5;
+    animation: pulse 2s infinite;
 }
 
 /* Slideshow */
@@ -84,12 +97,10 @@ audio { display: none; }
     max-width: 360px;
     height: 65vh;
     max-height: 420px;
-    margin-top: 16px;
+    margin: 16px auto 0;
     border-radius: 22px;
     overflow: hidden;
-    background: rgba(0,0,0,0.15);
 }
-
 .slide {
     position: absolute;
     inset: 0;
@@ -97,38 +108,19 @@ audio { display: none; }
     opacity: 0;
     transition: opacity 1.6s ease;
 }
-
 .slide.active { opacity: 1; }
 
-/* Caption */
 .caption {
     margin-top: 14px;
     font-style: italic;
     font-size: 1.15em;
 }
 
-/* Floating hearts */
-.heart {
-    position: fixed;
-    bottom: -10vh;
-    color: #ff2f5e;
-    font-size: 18px;
-    animation: floatUp 7s linear infinite;
-    pointer-events: none;
-    z-index: 2;
-}
-
-@keyframes floatUp {
-    0% { transform: translateY(0) scale(0.6); opacity: 0; }
-    20% { opacity: 1; }
-    100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
-}
-
 /* Ending overlay */
-.ending {
+.ending-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.75);
+    background: rgba(0,0,0,0.7);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -140,10 +132,9 @@ audio { display: none; }
     width: 280px;
     height: 180px;
     background: #fff;
-    border-radius: 8px;
+    border-radius: 10px;
     position: relative;
 }
-
 .envelope::before {
     content: "";
     position: absolute;
@@ -151,19 +142,16 @@ audio { display: none; }
     background: #f2f2f2;
     clip-path: polygon(0 0, 50% 50%, 100% 0);
     transform-origin: top;
-    transform: rotateX(0deg);
 }
-
 .envelope.open::before {
-    animation: flapOpen 1.2s ease forwards;
+    animation: openFlap 1.2s ease forwards;
 }
-
-@keyframes flapOpen {
+@keyframes openFlap {
     to { transform: rotateX(180deg); }
 }
 
-/* Words */
-.word {
+/* Final words */
+.final-word {
     position: fixed;
     inset: 0;
     display: flex;
@@ -171,198 +159,163 @@ audio { display: none; }
     justify-content: center;
     font-size: clamp(3rem, 8vw, 5rem);
     font-weight: 800;
-    color: #fff;
+    color: white;
     text-shadow:
         0 0 15px #ff9bb5,
         0 0 30px #ff6f91,
         0 0 60px #ff4d6d;
     opacity: 0;
-    animation: wordZoom 2s ease forwards;
+    animation: zoomIn 2s ease forwards;
     z-index: 30;
 }
 
-@keyframes wordZoom {
-    0% { opacity: 0; transform: scale(0.9); }
-    50% { opacity: 1; transform: scale(1.05); }
-    100% { opacity: 1; transform: scale(1); }
+@keyframes zoomIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
-/* Heart burst */
-.burst-heart {
-    position: fixed;
-    color: #ff2f5e;
-    font-size: 22px;
-    pointer-events: none;
-    animation: burst 2s ease-out forwards;
-    z-index: 40;
-}
+.hidden { display: none; }
 
-@keyframes burst {
-    to {
-        transform: translate(var(--x), var(--y)) scale(1.4);
-        opacity: 0;
-    }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes pulse {
-    0% { transform: scale(1); opacity: 0.7; }
-    50% { transform: scale(1.15); opacity: 1; }
-    100% { transform: scale(1); opacity: 0.7; }
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.15);}
 }
 </style>
 </head>
 
 <body>
 
-<audio id="bgMusic" loop playsinline>
-    <source src="love-me-jeje.mp3.mp3" type="audio/mpeg">
+<audio id="bgMusic" loop playsinline preload="auto">
+  <source src="love-me-jeje.mp3.mp3" type="audio/mpeg">
 </audio>
 
 <div id="musicIndicator" class="music-indicator hidden">🎵</div>
 
-<!-- INTRO -->
 <div class="card" id="question">
-    <h1>Raihaanah 💕</h1>
-    <p class="typing" id="typingText"></p>
-
-    <button class="music-btn" id="playBtn" onclick="playMusic()">▶ Play Music 💕</button>
-
-    <p><strong>Will you be my Valentine? 🌹</strong></p>
-
-    <div class="buttons">
-        <button onclick="showLove()">Yes 💖</button>
-        <button onclick="showLove()">Always 💞</button>
-    </div>
+  <h1>Raihaanah 💕</h1>
+  <p class="typing" id="typingText"></p>
+  <button class="music-btn" id="playBtn" onclick="playMusic()">▶ Play Music 💕</button>
+  <p><strong>Will you be my Valentine? 🌹</strong></p>
+  <div class="buttons">
+    <button onclick="showLove()">Yes 💖</button>
+    <button onclick="showLove()">Always 💞</button>
+  </div>
 </div>
 
-<!-- SLIDESHOW -->
 <div class="card hidden" id="love">
-    <h1>It’s Always You 💗</h1>
-
-    <div class="slideshow">
-        <img class="slide active" src="slide1.jpg">
-        <img class="slide" src="slide2.jpg">
-        <img class="slide" src="slide3.jpg">
-        <img class="slide" src="slide4.jpg">
-        <img class="slide" src="slide5.jpg">
-        <img class="slide" src="slide6.jpg">
-        <img class="slide" src="slide7.jpg">
-        <img class="slide" src="slide8.jpg">
-    </div>
-
-    <div class="caption">My favourite smile 💗</div>
+  <h1>It’s Always You 💗</h1>
+  <div class="slideshow">
+    <img class="slide active" src="slide1.jpg" data-caption="My favourite smile 💗">
+    <img class="slide" src="slide2.jpg" data-caption="You feel like home">
+    <img class="slide" src="slide3.jpg" data-caption="Every moment with you">
+    <img class="slide" src="slide4.jpg" data-caption="Soft memories 🌸">
+    <img class="slide" src="slide5.jpg" data-caption="Always us">
+    <img class="slide" src="slide6.jpg" data-caption="Unforgettable">
+    <img class="slide" src="slide7.jpg" data-caption="My calm place">
+    <img class="slide" src="slide8.jpg" data-caption="It’s always you ❤️">
+  </div>
+  <div class="caption" id="caption">My favourite smile 💗</div>
 </div>
-
-<!-- ENDING -->
-<div id="ending" class="ending hidden"></div>
 
 <script>
-/* MUSIC */
 const music = document.getElementById("bgMusic");
 const playBtn = document.getElementById("playBtn");
 const musicIndicator = document.getElementById("musicIndicator");
 
+/* Music */
 function playMusic() {
-    music.play().then(() => {
-        playBtn.classList.add("hidden");
-        musicIndicator.classList.remove("hidden");
-    });
+  music.play().then(() => {
+    playBtn.classList.add("hidden");
+    musicIndicator.classList.remove("hidden");
+  }).catch(()=>{});
 }
 
-/* INTRO TYPING */
+/* Typing intro */
 const introText = "Every moment with you feels like home. So here I am, asking with my whole heart…";
-let t = 0;
+let ti=0;
 (function typeIntro(){
-    if (t < introText.length) {
-        typingText.innerHTML += introText.charAt(t++);
-        setTimeout(typeIntro, 45);
-    }
+  if(ti<introText.length){
+    typingText.innerHTML+=introText.charAt(ti++);
+    setTimeout(typeIntro,45);
+  }
 })();
 
-/* FLOATING HEARTS */
-setInterval(() => {
-    const h = document.createElement("div");
-    h.className = "heart";
-    h.innerHTML = "❤";
-    h.style.left = Math.random() * 100 + "vw";
-    document.body.appendChild(h);
-    setTimeout(() => h.remove(), 7000);
-}, 500);
+/* Hearts */
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="❤️";
+  h.style.left=Math.random()*100+"vw";
+  h.style.bottom="-20px";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),8000);
+},800);
 
-/* SHOW SLIDESHOW */
-function showLove() {
-    question.classList.add("hidden");
-    love.classList.remove("hidden");
-    playMusic();
-    startSlideshow();
+/* Show love */
+function showLove(){
+  question.classList.add("hidden");
+  love.classList.remove("hidden");
+  playMusic();
+  startSlideshow();
 }
 
-/* SLIDESHOW */
-let current = 0;
-const slides = document.querySelectorAll(".slide");
+/* Slideshow */
+let current=0;
+const slides=document.querySelectorAll(".slide");
+const caption=document.getElementById("caption");
 
-function startSlideshow() {
-    setTimeout(() => {
-        const timer = setInterval(() => {
-            slides[current].classList.remove("active");
-            current++;
-            if (current >= slides.length) {
-                clearInterval(timer);
-                showEnding();
-                return;
-            }
-            slides[current].classList.add("active");
-        }, 8500);
-    }, 8500);
+function startSlideshow(){
+  setTimeout(()=>{
+    const timer=setInterval(()=>{
+      slides[current].classList.remove("active");
+      current++;
+      if(current>=slides.length){
+        clearInterval(timer);
+        setTimeout(runEnding,1200);
+        return;
+      }
+      slides[current].classList.add("active");
+      caption.innerText=slides[current].dataset.caption;
+    },8500);
+  },8500);
 }
 
-/* ENDING */
-function showEnding() {
-    const ending = document.getElementById("ending");
-    ending.classList.remove("hidden");
+/* Ending with envelope */
+function runEnding(){
+  const overlay=document.createElement("div");
+  overlay.className="ending-overlay";
+  document.body.appendChild(overlay);
 
-    const envelope = document.createElement("div");
-    envelope.className = "envelope";
-    ending.appendChild(envelope);
+  const envelope=document.createElement("div");
+  envelope.className="envelope";
+  overlay.appendChild(envelope);
 
-    requestAnimationFrame(() => envelope.classList.add("open"));
+  setTimeout(()=>envelope.classList.add("open"),400);
 
-    const words = ["I", "Love", "You", "Raihaanah ❤️"];
-    let delay = 1500;
+  const words=["I","Love","You","Raihaanah ❤️"];
+  let delay=2000;
 
-    words.forEach((word, index) => {
-        setTimeout(() => {
-            const w = document.createElement("div");
-            w.className = "word";
-            w.innerText = word;
-            document.body.appendChild(w);
-
-            if (word.includes("Raihaanah")) heartBurst();
-
-            if (index === words.length - 1) {
-                setTimeout(() => {
-                    envelope.remove();
-                    w.innerText = "I Love You Raihaanah ❤️";
-                }, 2000);
-            }
-        }, delay);
-        delay += 2000;
-    });
-}
-
-/* HEART BURST */
-function heartBurst() {
-    for (let i = 0; i < 18; i++) {
-        const h = document.createElement("div");
-        h.className = "burst-heart";
-        h.innerHTML = "❤";
-        h.style.left = "50%";
-        h.style.top = "50%";
-        h.style.setProperty("--x", (Math.random()*300-150)+"px");
-        h.style.setProperty("--y", (Math.random()*300-150)+"px");
-        document.body.appendChild(h);
-        setTimeout(() => h.remove(), 2000);
-    }
+  words.forEach((word,i)=>{
+    setTimeout(()=>{
+      const w=document.createElement("div");
+      w.className="final-word";
+      w.innerText=word;
+      document.body.appendChild(w);
+      if(i===words.length-1){
+        setTimeout(()=>{
+          overlay.remove();
+          envelope.remove();
+          w.innerText="I Love You Raihaanah ❤️";
+          setTimeout(()=>w.remove(),6000);
+        },2000);
+      }
+    },delay);
+    delay+=2000;
+  });
 }
 </script>
 
