@@ -9,7 +9,7 @@
 body {
     margin: 0;
     min-height: 100vh;
-    font-family: 'Segoe UI', 'Comic Sans MS', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background: linear-gradient(135deg, #ffb6c1, #ffd6e8);
     display: flex;
     justify-content: center;
@@ -26,11 +26,10 @@ body {
     border-radius: 26px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.25);
     max-width: 460px;
-    animation: fadeIn 1.4s ease;
-    position: relative;
-    z-index: 4;
+    animation: fadeIn 1.2s ease;
 }
 
+/* Text */
 h1 {
     font-size: 2.6em;
     margin-bottom: 10px;
@@ -38,17 +37,12 @@ h1 {
 
 p {
     font-size: 1.05em;
-    margin-bottom: 15px;
+    margin-bottom: 14px;
 }
 
 .typing {
-    min-height: 65px;
+    min-height: 60px;
     font-style: italic;
-}
-
-.countdown {
-    font-weight: bold;
-    margin: 10px 0;
 }
 
 /* Buttons */
@@ -67,44 +61,37 @@ button {
     font-size: 1em;
     color: white;
     cursor: pointer;
-    transition: transform 0.2s, background 0.3s;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
 }
 
-button:hover {
-    transform: scale(1.05);
-    background: #ff1e4d;
-}
-
-/* Music play button */
 .music-btn {
-    margin-top: 12px;
+    margin-top: 10px;
     background: #ff7a95;
 }
 
 /* Slideshow */
-.slideshow-container {
-    margin-top: 15px;
-}
-
 .slideshow {
     position: relative;
     width: 90vw;
     max-width: 360px;
     height: 65vh;
     max-height: 420px;
-    margin: auto;
+    margin: 16px auto 0;
     border-radius: 22px;
     overflow: hidden;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
     background: rgba(0,0,0,0.15);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.35);
 }
 
+/* FIXED IMAGE CENTERING (iPhone-safe) */
 .slide {
     position: absolute;
+    top: 50%;
+    left: 50%;
     width: 100%;
     height: 100%;
+    transform: translate(-50%, -50%);
     object-fit: contain;
     opacity: 0;
     transition: opacity 1.5s ease;
@@ -130,12 +117,9 @@ button:hover {
 }
 
 .final-love {
-    position: relative;
-    z-index: 6;
     margin-top: 20px;
     font-size: 1.5em;
     font-weight: bold;
-    color: #fff;
     text-shadow: 0 0 12px rgba(255,255,255,0.7);
     animation: glow 2.5s ease-in-out infinite;
 }
@@ -148,7 +132,6 @@ button:hover {
     font-size: 22px;
     opacity: 0.85;
     animation: pulse 2s ease-in-out infinite;
-    z-index: 10;
 }
 
 /* Hearts */
@@ -159,13 +142,11 @@ button:hover {
     animation: float 6s linear infinite;
 }
 
-.hidden {
-    display: none;
-}
+.hidden { display: none; }
 
 /* Animations */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(25px); }
+    from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
@@ -191,8 +172,7 @@ button:hover {
 
 <body>
 
-<!-- Music -->
-<audio id="bgMusic" loop preload="auto">
+<audio id="bgMusic" preload="auto" loop>
     <source src="love-me-jeje.mp3" type="audio/mpeg">
 </audio>
 
@@ -202,7 +182,6 @@ button:hover {
 <div class="card" id="question">
     <h1>Raihaanah 💕</h1>
     <p class="typing" id="typingText"></p>
-    <div class="countdown" id="countdown"></div>
 
     <button class="music-btn" id="playBtn" onclick="playMusic()">▶ Play Music 💕</button>
 
@@ -218,19 +197,18 @@ button:hover {
 <div class="card hidden" id="love">
     <h1>It’s Always You 💗</h1>
 
-    <div class="slideshow-container">
-        <div class="slideshow">
-            <img class="slide active" src="slide1.jpg" data-caption="My favourite smile 💗">
-            <img class="slide" src="slide2.jpg" data-caption="You feel like home">
-            <img class="slide" src="slide3.jpg" data-caption="Every moment with you">
-            <img class="slide" src="slide4.jpg" data-caption="Soft memories 🌸">
-            <img class="slide" src="slide5.jpg" data-caption="Always us">
-            <img class="slide" src="slide6.jpg" data-caption="Unforgettable">
-            <img class="slide" src="slide7.jpg" data-caption="My calm place">
-            <img class="slide" src="slide8.jpg" data-caption="It’s always you ❤️">
-        </div>
-        <div class="caption" id="caption">My favourite smile 💗</div>
+    <div class="slideshow">
+        <img class="slide active" src="slide1.jpg" data-caption="My favourite smile 💗">
+        <img class="slide" src="slide2.jpg" data-caption="You feel like home">
+        <img class="slide" src="slide3.jpg" data-caption="Every moment with you">
+        <img class="slide" src="slide4.jpg" data-caption="Soft memories 🌸">
+        <img class="slide" src="slide5.jpg" data-caption="Always us">
+        <img class="slide" src="slide6.jpg" data-caption="Unforgettable">
+        <img class="slide" src="slide7.jpg" data-caption="My calm place">
+        <img class="slide" src="slide8.jpg" data-caption="It’s always you ❤️">
     </div>
+
+    <div class="caption" id="caption">My favourite smile 💗</div>
 
     <div id="endingOverlay" class="ending-overlay hidden"></div>
     <p id="finalLove" class="final-love hidden"></p>
@@ -242,50 +220,37 @@ const playBtn = document.getElementById("playBtn");
 const musicIndicator = document.getElementById("musicIndicator");
 music.volume = 0;
 
-/* Music */
+/* iPhone-safe music start */
 function playMusic() {
+    music.volume = 0;
     music.play().then(() => {
         playBtn.classList.add("hidden");
         musicIndicator.classList.remove("hidden");
-        fadeInMusic();
+        setTimeout(fadeInMusic, 300);
     }).catch(() => {});
 }
 
 function fadeInMusic() {
-    let v = 0;
+    let v = music.volume;
     const fade = setInterval(() => {
-        if (v < 0.9) {
-            v += 0.05;
-            music.volume = v;
+        if (v < 1) {
+            v += 0.04;
+            music.volume = Math.min(v, 1);
         } else {
-            music.volume = 1;
             clearInterval(fade);
         }
-    }, 200);
+    }, 180);
 }
 
 /* Typing intro */
 const introText = "Every moment with you feels like home. So here I am, asking with my whole heart…";
-let ti = 0;
-(function typeIntro() {
-    if (ti < introText.length) {
-        typingText.innerHTML += introText.charAt(ti++);
+let i = 0;
+(function typeIntro(){
+    if (i < introText.length) {
+        typingText.innerHTML += introText.charAt(i++);
         setTimeout(typeIntro, 45);
     }
 })();
-
-/* Countdown */
-function updateCountdown() {
-    const valentines = new Date(new Date().getFullYear(), 1, 14);
-    const diff = valentines - new Date();
-    const days = Math.floor(diff / (1000*60*60*24));
-    const hours = Math.floor((diff / (1000*60*60)) % 24);
-    countdown.innerHTML = days >= 0
-        ? `⏳ ${days} days ${hours} hours until Valentine’s Day`
-        : "💘 It’s Valentine’s Day!";
-}
-setInterval(updateCountdown, 1000);
-updateCountdown();
 
 /* Show love */
 function showLove() {
@@ -300,41 +265,41 @@ function createHeart() {
     h.className = "heart";
     h.innerHTML = "❤";
     h.style.left = Math.random() * 100 + "vw";
-    h.style.fontSize = Math.random() * 20 + 12 + "px";
+    h.style.fontSize = Math.random() * 18 + 12 + "px";
     document.body.appendChild(h);
     setTimeout(() => h.remove(), 6000);
 }
-setInterval(createHeart, 350);
+setInterval(createHeart, 380);
 
-/* Slideshow + ending */
-let currentSlide = 0;
+/* Slideshow */
+let current = 0;
 const slides = document.querySelectorAll(".slide");
-const cap = document.getElementById("caption");
+const caption = document.getElementById("caption");
 
-const slideInterval = setInterval(() => {
-    slides[currentSlide].classList.remove("active");
-    currentSlide++;
+const slideTimer = setInterval(() => {
+    slides[current].classList.remove("active");
+    current++;
 
-    if (currentSlide >= slides.length) {
-        clearInterval(slideInterval);
+    if (current >= slides.length) {
+        clearInterval(slideTimer);
         setTimeout(showFinalLove, 1200);
         return;
     }
 
-    slides[currentSlide].classList.add("active");
-    cap.innerText = slides[currentSlide].dataset.caption;
+    slides[current].classList.add("active");
+    caption.innerText = slides[current].dataset.caption;
 }, 4500);
 
 function showFinalLove() {
-    cap.innerText = "";
+    caption.innerText = "";
     endingOverlay.classList.remove("hidden");
     finalLove.classList.remove("hidden");
 
     const text = "I love you, Raihaanah ❤️";
-    let i = 0;
-    (function typeLove() {
-        if (i < text.length) {
-            finalLove.innerHTML += text.charAt(i++);
+    let t = 0;
+    (function typeLove(){
+        if (t < text.length) {
+            finalLove.innerHTML += text.charAt(t++);
             setTimeout(typeLove, 90);
         }
     })();
