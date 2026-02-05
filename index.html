@@ -64,15 +64,25 @@ button {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Audio */
-.audio-box {
-    margin: 14px 0 10px;
+/* Music button */
+.music-btn {
+    margin: 10px auto;
+    background: #ff7a95;
 }
 
+/* Hidden native audio */
 audio {
-    width: 100%;
-    max-width: 320px;
-    border-radius: 20px;
+    display: none;
+}
+
+/* Music icon */
+.music-indicator {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    font-size: 22px;
+    opacity: 0.85;
+    animation: pulse 2s ease-in-out infinite;
 }
 
 /* Slideshow */
@@ -89,7 +99,7 @@ audio {
     box-shadow: 0 15px 35px rgba(0,0,0,0.35);
 }
 
-/* Image centering (Safari-safe) */
+/* iPhone-safe image centering */
 .slide {
     position: absolute;
     top: 50%;
@@ -99,7 +109,7 @@ audio {
     transform: translate(-50%, -50%);
     object-fit: contain;
     opacity: 0;
-    transition: opacity 1.5s ease;
+    transition: opacity 1.6s ease;
 }
 
 .slide.active {
@@ -141,10 +151,23 @@ audio {
     50% { text-shadow: 0 0 18px rgba(255,255,255,0.9); }
     100% { text-shadow: 0 0 10px rgba(255,255,255,0.6); }
 }
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.7; }
+}
 </style>
 </head>
 
 <body>
+
+<!-- Audio -->
+<audio id="bgMusic" loop playsinline preload="auto">
+    <source src="love-me-jeje.mp3.mp3" type="audio/mpeg">
+</audio>
+
+<div id="musicIndicator" class="music-indicator hidden">🎵</div>
 
 <!-- QUESTION -->
 <div class="card" id="question">
@@ -152,15 +175,7 @@ audio {
 
     <p class="typing" id="typingText"></p>
 
-    <div class="audio-box">
-        <p style="font-style: italic; margin-bottom: 6px;">
-            Tap play and take your time 💕
-        </p>
-        <audio controls loop playsinline>
-            <source src="love-me-jeje.mp3" type="audio/mpeg">
-            Your browser does not support audio.
-        </audio>
-    </div>
+    <button class="music-btn" id="playBtn" onclick="playMusic()">▶ Play Music 💕</button>
 
     <p><strong>Will you be my Valentine? 🌹</strong></p>
 
@@ -192,6 +207,18 @@ audio {
 </div>
 
 <script>
+const music = document.getElementById("bgMusic");
+const playBtn = document.getElementById("playBtn");
+const musicIndicator = document.getElementById("musicIndicator");
+
+/* Music play (iPhone-safe: user gesture) */
+function playMusic() {
+    music.play().then(() => {
+        playBtn.classList.add("hidden");
+        musicIndicator.classList.remove("hidden");
+    }).catch(() => {});
+}
+
 /* Typing intro */
 const introText = "Every moment with you feels like home. So here I am, asking with my whole heart…";
 let i = 0;
@@ -206,9 +233,10 @@ let i = 0;
 function showLove() {
     question.classList.add("hidden");
     love.classList.remove("hidden");
+    playMusic();
 }
 
-/* Slideshow */
+/* Slideshow (8.5 seconds per slide) */
 let current = 0;
 const slides = document.querySelectorAll(".slide");
 const caption = document.getElementById("caption");
@@ -219,14 +247,15 @@ const slideTimer = setInterval(() => {
 
     if (current >= slides.length) {
         clearInterval(slideTimer);
-        setTimeout(showFinalLove, 1200);
+        setTimeout(showFinalLove, 1500);
         return;
     }
 
     slides[current].classList.add("active");
     caption.innerText = slides[current].dataset.caption;
-}, 4500);
+}, 8500);
 
+/* Ending */
 function showFinalLove() {
     caption.innerText = "";
     endingOverlay.classList.remove("hidden");
