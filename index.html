@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Raihaanah 💕</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <style>
 body {
@@ -22,17 +22,17 @@ body {
 /* Card */
 .card {
     background: rgba(255,255,255,0.22);
-    padding: 25px;
-    border-radius: 25px;
+    padding: 26px;
+    border-radius: 26px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-    max-width: 380px;
+    max-width: 460px;
     animation: fadeIn 1.4s ease;
     position: relative;
     z-index: 4;
 }
 
 h1 {
-    font-size: 2.2em;
+    font-size: 2.6em;
     margin-bottom: 10px;
 }
 
@@ -55,42 +55,32 @@ p {
 .buttons {
     display: flex;
     justify-content: center;
-    gap: 12px;
+    gap: 14px;
     flex-wrap: wrap;
-    position: relative;
 }
 
 button {
     background: #ff4d6d;
     border: none;
-    padding: 12px 22px;
-    border-radius: 30px;
+    padding: 14px 26px;
+    border-radius: 32px;
     font-size: 1em;
     color: white;
     cursor: pointer;
     transition: transform 0.2s, background 0.3s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 button:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
     background: #ff1e4d;
 }
 
-#noBtn {
-    background: #ff9fb3;
-    position: absolute;
-}
-
-/* Play music button */
+/* Music play button */
 .music-btn {
-    margin-top: 10px;
+    margin-top: 12px;
     background: #ff7a95;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 25px;
-    color: white;
-    font-size: 0.95em;
-    cursor: pointer;
 }
 
 /* Slideshow */
@@ -100,44 +90,34 @@ button:hover {
 
 .slideshow {
     position: relative;
-    width: 260px;
-    height: 260px;
+    width: 90vw;
+    max-width: 360px;
+    height: 65vh;
+    max-height: 420px;
     margin: auto;
-    border-radius: 20px;
+    border-radius: 22px;
     overflow: hidden;
     box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.15);
 }
 
 .slide {
     position: absolute;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     opacity: 0;
-    transform: scale(1);
-    transition: opacity 1.5s ease, transform 6s ease;
+    transition: opacity 1.5s ease;
 }
 
 .slide.active {
     opacity: 1;
-    transform: scale(1.08);
 }
 
 .caption {
     margin-top: 12px;
     font-style: italic;
     font-size: 0.95em;
-}
-
-.fullscreen-btn {
-    margin-top: 10px;
-    background: #ff7a95;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 20px;
-    color: white;
-    cursor: pointer;
-    font-size: 0.9em;
 }
 
 /* Ending */
@@ -158,6 +138,17 @@ button:hover {
     color: #fff;
     text-shadow: 0 0 12px rgba(255,255,255,0.7);
     animation: glow 2.5s ease-in-out infinite;
+}
+
+/* Music indicator */
+.music-indicator {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    font-size: 22px;
+    opacity: 0.85;
+    animation: pulse 2s ease-in-out infinite;
+    z-index: 10;
 }
 
 /* Hearts */
@@ -189,15 +180,23 @@ button:hover {
     50% { text-shadow: 0 0 18px rgba(255,255,255,0.9); }
     100% { text-shadow: 0 0 10px rgba(255,255,255,0.6); }
 }
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.7; }
+}
 </style>
 </head>
 
 <body>
 
-<!-- 🎵 Music -->
-<audio id="bgMusic" loop>
+<!-- Music -->
+<audio id="bgMusic" loop preload="auto">
     <source src="love-me-jeje.mp3" type="audio/mpeg">
 </audio>
+
+<div id="musicIndicator" class="music-indicator hidden">🎵</div>
 
 <!-- QUESTION -->
 <div class="card" id="question">
@@ -212,7 +211,6 @@ button:hover {
     <div class="buttons">
         <button onclick="showLove()">Yes 💖</button>
         <button onclick="showLove()">Always 💞</button>
-        <button id="noBtn" onmouseover="moveNo()">No 🙈</button>
     </div>
 </div>
 
@@ -231,9 +229,7 @@ button:hover {
             <img class="slide" src="slide7.jpg" data-caption="My calm place">
             <img class="slide" src="slide8.jpg" data-caption="It’s always you ❤️">
         </div>
-
         <div class="caption" id="caption">My favourite smile 💗</div>
-        <button class="fullscreen-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
     </div>
 
     <div id="endingOverlay" class="ending-overlay hidden"></div>
@@ -241,34 +237,49 @@ button:hover {
 </div>
 
 <script>
-/* Music play */
 const music = document.getElementById("bgMusic");
 const playBtn = document.getElementById("playBtn");
+const musicIndicator = document.getElementById("musicIndicator");
+music.volume = 0;
 
+/* Music */
 function playMusic() {
-    music.play();
-    playBtn.classList.add("hidden");
+    music.play().then(() => {
+        playBtn.classList.add("hidden");
+        musicIndicator.classList.remove("hidden");
+        fadeInMusic();
+    }).catch(() => {});
+}
+
+function fadeInMusic() {
+    let v = 0;
+    const fade = setInterval(() => {
+        if (v < 0.9) {
+            v += 0.05;
+            music.volume = v;
+        } else {
+            music.volume = 1;
+            clearInterval(fade);
+        }
+    }, 200);
 }
 
 /* Typing intro */
 const introText = "Every moment with you feels like home. So here I am, asking with my whole heart…";
 let ti = 0;
-function typeIntro() {
+(function typeIntro() {
     if (ti < introText.length) {
-        typingText.innerHTML += introText.charAt(ti);
-        ti++;
+        typingText.innerHTML += introText.charAt(ti++);
         setTimeout(typeIntro, 45);
     }
-}
-typeIntro();
+})();
 
 /* Countdown */
 function updateCountdown() {
     const valentines = new Date(new Date().getFullYear(), 1, 14);
-    const now = new Date();
-    const diff = valentines - now;
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const diff = valentines - new Date();
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff / (1000*60*60)) % 24);
     countdown.innerHTML = days >= 0
         ? `⏳ ${days} days ${hours} hours until Valentine’s Day`
         : "💘 It’s Valentine’s Day!";
@@ -276,16 +287,11 @@ function updateCountdown() {
 setInterval(updateCountdown, 1000);
 updateCountdown();
 
-/* No button */
-function moveNo() {
-    noBtn.style.left = Math.random() * 200 - 100 + "px";
-    noBtn.style.top = Math.random() * 80 - 40 + "px";
-}
-
 /* Show love */
 function showLove() {
     question.classList.add("hidden");
     love.classList.remove("hidden");
+    playMusic();
 }
 
 /* Hearts */
@@ -304,8 +310,6 @@ setInterval(createHeart, 350);
 let currentSlide = 0;
 const slides = document.querySelectorAll(".slide");
 const cap = document.getElementById("caption");
-const finalLove = document.getElementById("finalLove");
-const overlay = document.getElementById("endingOverlay");
 
 const slideInterval = setInterval(() => {
     slides[currentSlide].classList.remove("active");
@@ -319,33 +323,21 @@ const slideInterval = setInterval(() => {
 
     slides[currentSlide].classList.add("active");
     cap.innerText = slides[currentSlide].dataset.caption;
-    for (let i = 0; i < 8; i++) setTimeout(createHeart, i * 120);
 }, 4500);
 
 function showFinalLove() {
     cap.innerText = "";
-    overlay.classList.remove("hidden");
+    endingOverlay.classList.remove("hidden");
     finalLove.classList.remove("hidden");
 
     const text = "I love you, Raihaanah ❤️";
     let i = 0;
-    function typeLove() {
+    (function typeLove() {
         if (i < text.length) {
-            finalLove.innerHTML += text.charAt(i);
-            i++;
+            finalLove.innerHTML += text.charAt(i++);
             setTimeout(typeLove, 90);
         }
-    }
-    typeLove();
-}
-
-/* Fullscreen */
-function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-    } else {
-        document.exitFullscreen();
-    }
+    })();
 }
 </script>
 
