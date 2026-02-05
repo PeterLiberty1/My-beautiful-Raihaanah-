@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Raihaanah 💕</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: 'Segoe UI', 'Comic Sans MS', sans-serif;
+        background: linear-gradient(135deg, #ffb6c1, #ffd6e8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow-x: hidden;
+        color: #fff;
+        text-align: center;
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.22);
+        padding: 25px;
+        border-radius: 25px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        max-width: 380px;
+        animation: fadeIn 1.4s ease;
+    }
+
+    h1 {
+        font-size: 2.2em;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 1.05em;
+        margin-bottom: 15px;
+    }
+
+    .typing {
+        min-height: 65px;
+        font-style: italic;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        position: relative;
+        margin-top: 10px;
+    }
+
+    button {
+        background: #ff4d6d;
+        border: none;
+        padding: 12px 22px;
+        border-radius: 30px;
+        font-size: 1em;
+        color: white;
+        cursor: pointer;
+        transition: transform 0.2s, background 0.3s;
+    }
+
+    button:hover {
+        transform: scale(1.1);
+        background: #ff1e4d;
+    }
+
+    #noBtn {
+        background: #ff9fb3;
+        position: absolute;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .countdown {
+        font-weight: bold;
+        margin: 10px 0;
+    }
+
+    .gallery {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 15px;
+    }
+
+    .gallery img {
+        width: 90px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 15px;
+        opacity: 0;
+        animation: photoFade 1s ease forwards;
+    }
+
+    .gallery img:nth-child(1) { animation-delay: 0.3s; }
+    .gallery img:nth-child(2) { animation-delay: 0.8s; }
+    .gallery img:nth-child(3) { animation-delay: 1.3s; }
+
+    @keyframes photoFade {
+        from { opacity: 0; transform: scale(0.8); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(25px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .heart {
+        position: absolute;
+        color: rgba(255,255,255,0.9);
+        font-size: 22px;
+        animation: float 6s linear infinite;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+        50% { opacity: 1; }
+        100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+
+    .burst {
+        animation: burst 0.6s ease;
+    }
+
+    @keyframes burst {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.15); }
+        100% { transform: scale(1); }
+    }
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 Background Music -->
+<audio autoplay loop>
+    <source src="love-me-jeje.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card" id="question">
+    <h1>Raihaanah 💕</h1>
+
+    <p class="typing" id="typingText"></p>
+
+    <div class="countdown" id="countdown"></div>
+
+    <p><strong>Will you be my Valentine? 🌹</strong></p>
+
+    <div class="buttons">
+        <button onclick="showLove()">Yes 💖</button>
+        <button onclick="showLove()">Always 💞</button>
+        <button id="noBtn" onmouseover="moveNo()">No 🙈</button>
+    </div>
+</div>
+
+<div class="card hidden" id="love">
+    <h1>It’s Always You 💗</h1>
+    <p>Today, tomorrow, and every soft moment in between.</p>
+
+    <div class="gallery">
+        <img src="photo1.jpg">
+        <img src="photo2.jpg">
+        <img src="photo3.jpg">
+    </div>
+
+    <p>Happy Valentine’s Day, Raihaanah ❤️</p>
+</div>
+
+<script>
+    // Typing effect
+    const text = "Every moment with you feels like home. So here I am, asking with my whole heart…";
+    let i = 0;
+    function typeText() {
+        if (i < text.length) {
+            document.getElementById("typingText").innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typeText, 45);
+        }
+    }
+    typeText();
+
+    // Countdown
+    function updateCountdown() {
+        const valentines = new Date(new Date().getFullYear(), 1, 14);
+        const now = new Date();
+        const diff = valentines - now;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        document.getElementById("countdown").innerHTML =
+            days >= 0 ? `⏳ ${days} days ${hours} hours until Valentine’s Day` : "💘 It’s Valentine’s Day!";
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // No button escape
+    function moveNo() {
+        const btn = document.getElementById("noBtn");
+        btn.style.left = Math.random() * 200 - 100 + "px";
+        btn.style.top = Math.random() * 80 - 40 + "px";
+    }
+
+    // Yes / Always action
+    function showLove() {
+        document.getElementById("question").classList.add("hidden");
+        const love = document.getElementById("love");
+        love.classList.remove("hidden");
+        love.classList.add("burst");
+        heartExplosion();
+    }
+
+    // Floating hearts
+    function createHeart() {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "❤";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = (Math.random() * 20 + 12) + "px";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(createHeart, 350);
+
+    // Heart explosion
+    function heartExplosion() {
+        for (let i = 0; i < 25; i++) {
+            setTimeout(createHeart, i * 80);
+        }
+    }
+</script>
+
+</body>
+</html>
